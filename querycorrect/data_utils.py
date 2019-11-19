@@ -1,7 +1,7 @@
 import re, os, codecs, logging, jieba, copy, json, traceback
 from english_corrector import EnglishCorrector
 from config import config
-from utils import re_en, is_alphabet_string, PUNCTUATION_LIST, is_chinese
+from utils import re_en, is_alphabet_string, PUNCTUATION_LIST, is_chinese, pinyin2hanzi
 
 def _get_custom_confusion_dict(path):     # 取自定义困惑集。dict, {variant: origin}, eg: {"交通先行": "交通限行"}
     confusion = {}
@@ -72,9 +72,11 @@ class Tokenizer(EnglishCorrector):
             word = word.strip()
             if word in ['', ' ']: continue
             if re_en.fullmatch(word):   # 英文处理
-                if word in self.custom_filter_word: rword = word
-                elif correct_eng: rword = self.correction(word)
-                else: rword = word
+                hanzi = pinyin2hanzi([word], 10)[0]      # 拼音转汉字处理
+                if word in self.custom_filter_word: rword = word    # 优先考虑自定义字典
+                elif hanzi: rword = hanzi.path[0]                   # 拼音转汉字处理
+                elif correct_eng: rword = self.correction(word)     # 英文纠错
+                else: rword = word                                  # 不处理
                 word_seg.append((rword, word_index, word_index+len(rword)))
                 senten2term.append(rword)
                 char_seg.append((rword, char_index, char_index+len(rword)))

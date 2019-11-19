@@ -2,8 +2,15 @@ import json, re, logging, traceback, jieba, progressbar, os
 from collections import Counter
 #from nlutools import tools as nlu
 from config import config
+from Pinyin2Hanzi import DefaultDagParams, dag
 
 #**********************************************************************************************************************#
+def pinyin2hanzi(pinyinList, num=3):
+    dagParams = DefaultDagParams()
+    result = dag(dagParams, pinyinList, path_num=num, log=True)
+    return result
+a = pinyin2hanzi(["china"])
+
 names = [e.strip() for e in open(config.baijiaxing, encoding='utf8').readlines() if e.strip() != '']
 def is_name(text):
     text = str(text)    ; aa=text[0]
