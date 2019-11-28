@@ -46,23 +46,33 @@ def edits2(word):
     "All edits that are two edits away from `word`."
     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 
+def selecttopk(items, k, reverse=True):
+    res = []; scores = set()
+    sorted_items = sorted(items, key=lambda d: d[1], reverse=reverse)
+    for w, s in sorted_items:
+        scores.add(s)
+        if len(scores) > k:
+            break
+        res.append((w, s))
+    return res
+
 class EnglishCorrector(LanguageModel):
     def __init__(self):
         super(EnglishCorrector, self).__init__()
-        self.WORDS = load_word_freq_dict(config.english_path)
+        self.WORDS = load_word_freq_dict(config.english_path, config.english_th)
+        self.WORDS.update(load_word_freq_dict(config.custom_word_freq_path))
         self.custom_confusion_dict = _get_custom_confusion_dict(config.custom_confusion_path)
-        a=1
 
     def eng_ppl_score(self, words):         # 取语言模型困惑度得分，越小句子越通顺。words: list, 以词或字切分
         return self.eng_lm.perplexity(' '.join(words))
 
-    def sort_candidates(self, word, candidates, edit_sort=True, topk=5):
+    def sort_candidates(self, word, candidates, edit_sort=True, topk=2):
         if edit_sort:
             candi_scores = [(e, round(Levenshtein.ratio(e, word), 3)) for e in candidates]
-            sorted_candis = sorted(candi_scores, key=lambda d: d[1], reverse=True)[:topk]
+            sorted_candis = selecttopk(candi_scores, topk)
         else:
             candi_scores = [(e, self.eng_ppl_score(list(e))) for e in candidates]
-            sorted_candis = sorted(candi_scores, key=lambda d: d[1])[:topk]
+            sorted_candis = selecttopk(candi_scores, topk, False)
         candidate = [e[0] for e in sorted_candis]
         return candidate, sorted_candis
 
@@ -72,11 +82,11 @@ class EnglishCorrector(LanguageModel):
             return self.custom_confusion_dict.get(word)
         if len(word) == 1 or word in self.WORDS or not self.WORDS:
             return word
-        candis = self.candidates(word, 0.8)
+        candis = self.candidates(word, 0.5)
         if not candis:
             return word
-        candi_edit, sorted_candi_edit = self.sort_candidates(word, candis)   # 编辑距离排序
-        candi_lm, sorted_scores = self.sort_candidates(word, candi_edit, False)  # 语言模型排序
+        candi, sorted_candi = self.sort_candidates(word, candis, True)   # 编辑距离排序
+        candidate, sorted_scores = self.sort_candidates(word, candi, False)  # 语言模型排序
         #scores = [(e, self.eng_ppl_score(list(e))) for e in candis]
         #sorted_scores = sorted(scores, key=lambda d: d[1])
         return sorted_scores[0][0]
@@ -102,6 +112,6 @@ class EnglishCorrector(LanguageModel):
         return res
 
 if __name__ == '__main__':
-    d = Levenshtein.distance("andio", "android")
+    d = Levenshtein.distance("gloang", "golang")
     ec = EnglishCorrector()
-    print(ec.correction("wold"))
+    print(ec.correction("austria"))

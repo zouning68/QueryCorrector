@@ -218,7 +218,7 @@ if __name__ == "__main__":
     es_obj = ElasticObj("candidate_query")
 
     #es_obj.update_index()      # ****** 更新索引操作 *******
-    if que == "gxs":
+    if que == "gxsy":
         es_obj.update_index_batch(50000)    # ****** 批量更新索引操作 *******
 
     #es_obj.delete_index()
