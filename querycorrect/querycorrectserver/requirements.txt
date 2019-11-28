@@ -1,0 +1,8 @@
+tornado
+requests
+pypinyin
+jieba
+Pinyin2Hanzi
+https://github.com/kpu/kenlm/archive/master.zip
+python-Levenshtein
+numpy
