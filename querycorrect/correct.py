@@ -1,9 +1,11 @@
 import codecs, operator, time, logging, sys
 from pypinyin import lazy_pinyin
 import numpy as np
-from data_utils import load_char_set, load_same_pinyin, load_same_stroke, Tokenizer, ErrorType, load_word_freq_dict, is_alphabet_string
-from utils import PUNCTUATION_LIST, uniform, is_chinese_string, edit_distance_word, is_name
+from data_utils import load_char_set, load_same_pinyin, load_same_stroke, load_word_freq_dict
+from utils import PUNCTUATION_LIST, uniform, is_chinese_string, edit_distance_word, ErrorType, is_alphabet_string, is_name
 from config import config
+from seg_utils import Tokenizer
+from company import get_query_entity, get_entity
 
 class Detector(Tokenizer):
     def __init__(self, language_model_path=config.language_model_path,
@@ -12,6 +14,8 @@ class Detector(Tokenizer):
                  place_name_path=config.place_name_path, stopwords_path=config.stopwords_path):
         super(Detector, self).__init__()
         self.name = 'detector'
+        self.correct_sentence, self.senten2term, self.query_entitys, self.maybe_errors = "", [], [], []
+        self.confusion_sets = ['前段']
         self.word_freq_path = word_freq_path
         self.custom_word_freq_path = custom_word_freq_path
         self.custom_confusion_path = custom_confusion_path
@@ -20,12 +24,12 @@ class Detector(Tokenizer):
         self.stopwords_path = stopwords_path
         self.is_char_error_detect = True
         self.is_word_error_detect = True
-        self.is_confusion_word_error_detect = False
+        self.is_confusion_word_error_detect = True
         self.initialized_detector = False
         #initialize detector dict sets
         # 词、频数 dict
         t1 = time.time()
-        self.word_freq = load_word_freq_dict(self.word_freq_path)
+        self.word_freq = load_word_freq_dict(self.word_freq_path, config.word_freq_th)
         t2 = time.time()
         logging.debug('Loaded word freq file: %s, size: %d, spend: %s s' % (self.word_freq_path, len(self.word_freq), str(t2 - t1)))
         # 自定义混淆集
@@ -37,7 +41,7 @@ class Detector(Tokenizer):
         self.person_names = load_word_freq_dict(self.person_name_path)
         self.place_names = load_word_freq_dict(self.place_name_path)
         self.stopwords = load_word_freq_dict(self.stopwords_path)
-        self.word_freq.update(load_word_freq_dict(config.common_char_path))         # 公共字符集扩充词频字典
+        self.word_freq.update(load_word_freq_dict(config.common_char_path, config.commom_char_th))         # 公共字符集扩充词频字典
         # 合并切词词典及自定义词典
         self.custom_word_freq.update(self.person_names)
         self.custom_word_freq.update(self.place_names)
@@ -102,10 +106,10 @@ class Detector(Tokenizer):
         scores = np.array(scores)
         if len(scores.shape) == 1:
             scores = scores[:, None]
-        median = np.median(scores, axis=0)  # get median of all scores
+        median = np.median(scores);#np.median(scores, axis=0)  # get median of all scores
         margin_median = np.abs(scores - median).flatten()  # deviation from the median
         # 平均绝对离差值
-        med_abs_deviation = np.median(margin_median)
+        med_abs_deviation = np.mean(margin_median);#np.median(margin_median)
         if med_abs_deviation == 0:
             return result
         y_score = ratio * margin_median / med_abs_deviation
@@ -114,6 +118,7 @@ class Detector(Tokenizer):
         maybe_error_indices = np.where((y_score > threshold) & (scores < median))
         # 取全部疑似错误字的index
         result = list(maybe_error_indices[0])
+        result = [int(res) for res in result]       # int64 -> int
         return result
 
     @staticmethod
@@ -137,8 +142,11 @@ class Detector(Tokenizer):
         # 文本归一化
         sentence = uniform(sentence)
         # 切词
-        correct_sentence, senten2term, char_seg, word_seg, detail_eng = self.tokenize(sentence)
+        if is_alphabet_string(sentence): correctpinyin = False
+        else: correctpinyin = True
+        correct_sentence, senten2term, char_seg, word_seg, detail_eng = self.tokenize(sentence, correct_pinyin=correctpinyin)
         self.correct_sentence = correct_sentence
+        self.senten2term = senten2term
         # 1、自定义混淆集 custom_confusion 加入疑似错误词典 maybe_errors
         if self.is_confusion_word_error_detect:
             for confuse in self.custom_confusion:       # 在错误词典 custom_confusion 中的词为纠错词
@@ -151,13 +159,14 @@ class Detector(Tokenizer):
             for word, begin_idx, end_idx in word_seg:
                 if self.is_filter_token(word): continue      # pass filter word
                 if word in self.word_freq: continue          # pass in dict
+                if len(word) == 1: continue             # 单个词过滤
                 maybe_err = [word, begin_idx, end_idx, ErrorType.word]
                 self._add_maybe_error_item(maybe_err, maybe_errors)
         # 3、语言模型检测疑似错误字
         if self.is_char_error_detect:
             try:
                 ngram_avg_scores = []
-                for n in [2, 3]:
+                for n in [1, 2, 3]:
                     scores = []
                     for i in range(len(senten2term) - n +1):
                         word = senten2term[i: i+n]
@@ -175,12 +184,15 @@ class Detector(Tokenizer):
                 if ngram_avg_scores: sent_scores = list(np.average(np.array(ngram_avg_scores), axis=0))
                 else: sent_scores = [0]
                 # 取疑似错字信息
-                for i in self._get_maybe_error_index(sent_scores):
+                maybe_error_index = self._get_maybe_error_index(sent_scores, threshold=1)
+                for i in maybe_error_index:
                     token = senten2term[i]
                     # pass filter word
-                    if self.is_filter_token(token) or token in self.word_freq or token in [e[0] for e in maybe_errors]:
+                    #if self.is_filter_token(token) or token in self.word_freq or token in [e[0] for e in maybe_errors]:
+                    if token not in self.confusion_sets and (self.is_filter_token(token) or token in self.word_freq):
                         continue
-                    maybe_err = [token, i, i + 1, ErrorType.term]  # token, begin_idx, end_idx, error_type
+                    idx = correct_sentence.find(token)
+                    maybe_err = [token, idx, idx + len(token), ErrorType.term]  # token, begin_idx, end_idx, error_type
                     self._add_maybe_error_item(maybe_err, maybe_errors)
             except IndexError as ie:
                 logging.warning("index error, sentence:" + sentence + str(ie))
@@ -208,7 +220,7 @@ class Corrector(Detector):
         self.initialized_corrector = False
         # initialize corrector dict sets
         t1 = time.time()
-        self.cn_char_set = load_char_set(self.common_char_path)  # chinese common char dict
+        self.cn_char_set = load_char_set(self.common_char_path, config.commom_char_th)  # chinese common char dict
         self.same_pinyin = load_same_pinyin(self.same_pinyin_text_path)  # same pinyin
         self.same_stroke = load_same_stroke(self.same_stroke_text_path)  # same stroke
         logging.debug("Loaded same pinyin file: %s, same stroke file: %s, spend: %.3f s." % (
@@ -296,7 +308,7 @@ class Corrector(Detector):
             if i == item and s == sorted_perplexitys[0][1]:
                 corrected_item = i
                 break
-        #corrected_item = min(maybe_right_items, key=lambda k: self.ppl_score(list(before_sent + k + after_sent)))
+        #corrected_item_ = min(maybe_right_items, key=lambda k: self.ppl_score(list(before_sent + k + after_sent)))
         return corrected_item
 
     def correct(self, sentence):
@@ -308,15 +320,19 @@ class Corrector(Detector):
         detail = []
         # 长句切分为短句
         # sentences = re.split(r"；|，|。|\?\s|;\s|,\s", sentence)
-        maybe_errors, detail_eng = self.detect(sentence)
+        self.maybe_errors, detail_eng = self.detect(sentence)
         # trick: 类似翻译模型，倒序处理
         #maybe_errors = sorted(maybe_errors, key=operator.itemgetter(2), reverse=True)
-        for item, begin_idx, end_idx, err_type in maybe_errors:
+        self.query_entitys = get_entity(sentence)['info'] #get_query_entity(sentence)['info']
+        for item, begin_idx, end_idx, err_type in self.maybe_errors:
+            is_contain = self._check_contain_error([item, begin_idx, end_idx, err_type], self.query_entitys)
+            if is_contain: continue
+            #print(maybe_errors, '\n', query_entitys, '\n', is_contain); exit()
             # 纠错，逐个处理
             before_sent = self.correct_sentence[:begin_idx]
             after_sent = self.correct_sentence[end_idx:]
             # 困惑集中指定的词，直接取结果
-            if err_type == ErrorType.confusion and 0:
+            if err_type == ErrorType.confusion:
                 corrected_item = self.custom_confusion[item]
             else:
                 # 姓名或者对非中文的错字不做处理，已经处理过
@@ -339,7 +355,7 @@ class Corrector(Detector):
 
 if __name__ == "__main__":
     try: que = sys.argv[1]
-    except: que = "electron" #"百读jaca开法工成师,后太程序开发"
+    except: que = "开法工程师" #"百读jaca开法工成师,后太程序开发"
     c = Corrector()
     corrected_sent, detail = c.correct(que)
     print(que, " ------> " ,corrected_sent, detail)

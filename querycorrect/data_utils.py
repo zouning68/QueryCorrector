@@ -1,7 +1,4 @@
-import re, os, codecs, logging, jieba, copy, json, traceback
-from english_corrector import EnglishCorrector
-from config import config
-from utils import re_en, is_alphabet_string, PUNCTUATION_LIST, is_chinese, pinyin2hanzi
+import os, codecs, logging, jieba, traceback
 
 def _get_custom_confusion_dict(path):     # 取自定义困惑集。dict, {variant: origin}, eg: {"交通先行": "交通限行"}
     confusion = {}
@@ -18,7 +15,7 @@ def _get_custom_confusion_dict(path):     # 取自定义困惑集。dict, {varia
             confusion[variant] = origin
     return confusion
 
-def load_word_freq_dict(path):      # 加载切词词典
+def load_word_freq_dict(path, th=0):      # 加载切词词典
     word_freq = {}
     if not os.path.exists(path):
         logging.warning("file not exists:" + path)
@@ -34,82 +31,19 @@ def load_word_freq_dict(path):      # 加载切词词典
             word = info[0]
             # 取词频，默认1
             freq = int(info[1]) if len(info) > 1 else 1
+            if freq < th: continue
             word_freq[word] = freq
     return word_freq
 
-class Tokenizer(EnglishCorrector):
-    def __init__(self):
-        super(Tokenizer, self).__init__()
-        self.model = jieba
-        self.model.default_logger.setLevel(logging.ERROR)
-        # 初始化大词典
-        if os.path.exists(config.word_freq_path):
-            self.model.set_dictionary(config.word_freq_path)
-        # 加载用户自定义词典
-        custom_word_freq = load_word_freq_dict(config.custom_word_freq_path)
-        self.custom_filter_word = copy.deepcopy(custom_word_freq)
-        person_names = load_word_freq_dict(config.person_name_path)
-        place_names = load_word_freq_dict(config.place_name_path)
-        stopwords = load_word_freq_dict(config.stopwords_path)
-        custom_word_freq.update(person_names)
-        custom_word_freq.update(place_names)
-        custom_word_freq.update(stopwords)
-        if custom_word_freq:
-            for w, f in custom_word_freq.items():
-                self.model.add_word(w, freq=f)
-        # 加载混淆集词典
-        custom_confusion = _get_custom_confusion_dict(config.custom_confusion_path)
-        if custom_confusion:
-            for k, word in custom_confusion.items():
-                # 添加到分词器的自定义词典中
-                self.model.add_word(k)
-                self.model.add_word(word)
-
-    def tokenize(self, sentence, correct_eng=True):
-        correct_sentence, senten2term, char_seg, word_seg, detail_eng, char_index, word_index = '', [], [], [], [], 0, 0
-        #a=re_en.split(sentence)#; sentence = "上海百度公司java,elastic开法工程师"; aa=list(self.model.tokenize(sentence))
-        for word in re_en.split(sentence):
-            word = word.strip()
-            if word in ['', ' ']: continue
-            if re_en.fullmatch(word):   # 英文处理
-                hanzi = pinyin2hanzi([word], 10)[0]      # 拼音转汉字处理
-                if word in self.custom_filter_word: rword = word    # 优先考虑自定义字典
-                elif hanzi: rword = hanzi.path[0]                   # 拼音转汉字处理
-                elif correct_eng: rword = self.correction(word)     # 英文纠错
-                else: rword = word                                  # 不处理
-                word_seg.append((rword, word_index, word_index+len(rword)))
-                senten2term.append(rword)
-                char_seg.append((rword, char_index, char_index+len(rword)))
-                if rword != word:       # 记录英文纠错细节
-                    detail_eng.append([word, rword, char_index, char_index+len(rword), ErrorType.english])
-                char_index += len(rword)
-            else:                       # 非英文处理
-                model_seg = list(self.model.tokenize(word))
-                word_seg.extend([(e[0], e[1]+word_index, e[2]+word_index) for e in model_seg])
-                if config.char_term: senten2term.extend(list(word))
-                else: senten2term.extend([e[0] for e in model_seg])
-                for w in list(word):
-                    char_seg.append((w, char_index, char_index+1))
-                    char_index += 1
-            word_index = word_seg[-1][2]
-        for i in range(len(word_seg)):
-            if i < len(word_seg) - 1 and is_alphabet_string(word_seg[i][0]) and  is_alphabet_string(word_seg[i+1][0]):
-                correct_sentence += word_seg[i][0] + ' '
-            else:
-                correct_sentence += word_seg[i][0]
-        return correct_sentence, senten2term, char_seg, word_seg, detail_eng
-
-#t=Tokenizer(); a=t.tokenize("百度jaca开法工程师、c++后台", False)
-class ErrorType(object):
-    confusion, word, term, english = 'confusion', 'word', 'term', 'english'
-
-def load_char_set(path):
+def load_char_set(path, th=0):
     words = set()
     if not os.path.exists(path):
         logging.warning("file not exists:" + path)
         return words
-    with codecs.open(path, 'r', encoding='utf-8') as f:
-        for w in f:
+    with codecs.open(path, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            w, f = line.strip().split()
+            if int(f) < th: continue
             words.add(w.strip())
     return words
 
