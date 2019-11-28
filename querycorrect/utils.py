@@ -1,15 +1,17 @@
-import json, re, logging, traceback, jieba, progressbar, os
+import re, logging, traceback
 from collections import Counter
-#from nlutools import tools as nlu
 from config import config
 from Pinyin2Hanzi import DefaultDagParams, dag
 
 #**********************************************************************************************************************#
+class ErrorType(object):
+    confusion, word, term, english = 'confusion', 'word', 'term', 'english'
+
+dagParams = DefaultDagParams()
 def pinyin2hanzi(pinyinList, num=3):
-    dagParams = DefaultDagParams()
-    result = dag(dagParams, pinyinList, path_num=num, log=True)
+    result = dag(dagParams, pinyinList, path_num=num)
     return result
-a = pinyin2hanzi(["china"])
+a = pinyin2hanzi(["meitu"])
 
 names = [e.strip() for e in open(config.baijiaxing, encoding='utf8').readlines() if e.strip() != '']
 def is_name(text):
@@ -21,15 +23,19 @@ a=is_name("锜晓敏")
 
 PUNCTUATION_LIST = ".。,，,、?？:：;；{}[]【】“‘’”《》/!！%……（）<>@#$~^￥%&*\"\'=+-_——「」"
 re_ch = re.compile(u"([\u4e00-\u9fa5])",re.S)
-re_en = re.compile(u"([a-zA-Z\+\#]+)",re.S)
+re_en = re.compile(u"([a-zA-Z\#]+|[0-9]+k[\+]*|c\+\+)",re.S)
+re_salary = re.compile(u"([0-9]+k[\+]*)",re.S)
+
+a=re_en.split("montage+深圳c++")
 
 def is_alphabet_string(string):     # 判断是否全部为英文字母
     string = string.lower()
     for c in string:
+        if c in PUNCTUATION_LIST: continue
         if c < 'a' or c > 'z':
             return False
     return True
-a=is_alphabet_string("Java开")
+a=is_alphabet_string("Java,")
 
 def Q2B(uchar):     # 全角转半角
     inside_code = ord(uchar)
@@ -88,17 +94,18 @@ def rmPunct(line):
 a=rmPunct("消费者/顾客word、excel、ppt、visio、xmind")
 
 def clean_query(query):
-    query = re.sub(r"[\\/、， ]+", ",", query)
+    query = re.sub(r"[&$￥～�|＠？＞＝＜；!｜｛＼］［／－＋＊*＆％＃＂！🌐．﹒海金]{1,}|[.#-]{2,}|[+]{3,}|[0-9]*%", "", query)
+    query = re.sub(r"[\\/、，]+", ",", query)
     query = re.sub(r"[（]+", "(", query)
     query = re.sub(r"[）]+", ")", query)
-    query = re.sub(r"[【】●|“”]+", " ", query)
+    query = re.sub(r"[【】●|“”^H*]+", " ", query)
     query = re.sub(r"[：]+", ":", query)
     query = re.sub(r"[ ~]+", " ", query)
     query = query.lstrip(",")
     query = query.rstrip(",")
     query = query.strip().lower()
     return query
-aa=clean_query("java-eam【maximo】●●●●项目经理、")
+aa=clean_query("####文旅地.......产集｜团.＼.....")
 
 def normal_qeury(text):
     re_ch = re.compile("([\u4e00-\u9fa5])", re.S)
@@ -115,100 +122,7 @@ def normal_qeury(text):
     else: return True
 a=normal_qeury(clean_query("搜狐畅游17173"))
 
-def get_info(origi_dict, key, *args, flag=False):
-    res = []
-    try:
-        if key not in origi_dict or type(origi_dict[key]) != type({}):
-            return res
-        info = origi_dict[key]
-        if flag:
-            for arg in args[0]:
-                if arg in info and info[arg] and isinstance(info[arg], str):
-                    res.append(key+'_'+arg+'@'+info[arg])
-        else:
-            for k, v in info.items():
-                for arg in args[0]:
-                    if arg in v and v[arg] and isinstance(v[arg], str):
-                        res.append(key+'_'+arg+'@'+v[arg])
-    except Exception as e:
-        logging.warning('get_info_err=%s' % repr(e)); print(traceback.format_exc())
-    return res
-
-def resolve_dict(dict_info):
-    res = []
-    try:
-        if not isinstance(dict_info, dict): return res
-        for k, v in dict_info.items():
-            edu = get_info(v, 'education', ['discipline_name', 'school_name'])
-            work = get_info(v, 'work', ['corporation_name', 'title_name', 'industry_name', 'position_name', 'station_name', 'architecture_name', 'city'])
-            certificate = get_info(v, 'certificate', ['name'])
-            project = get_info(v, 'project', ['name'])
-            language = get_info(v, 'certificate', ['name'])
-            skill = get_info(v, 'skill', ['name'])
-            basic = get_info(v, 'basic', ['expect_position_name', 'expect_industry_name', 'resume_name'], flag=True)
-            res.extend(edu); res.extend(work); res.extend(certificate); res.extend(project); res.extend(skill); res.extend(basic)
-            res.extend(language)
-    except Exception as e:
-        logging.warning('resolve_dict_err=%s' % repr(e)); print(traceback.format_exc())
-    return res
-
-def parse_line(line):
-    querys, tmp = [], []
-    try:
-        line = line.strip().lower().split('\t')
-        if len(line) >= 5:
-            tmp.append("query@"+line[5])
-        if len(line) >= 36:
-            cv_info = json.loads(line[36])
-            tmp.extend(resolve_dict(cv_info))
-        #querys = tmp
-        #'''
-        for q in tmp:
-            try: na, qu = q.split('@')
-            except: continue
-            qu = clean_query(qu)
-            if not normal_qeury(qu) or is_name(qu): continue
-            querys.append(na+'@'+qu)
-            seg_query = [e for e in list(jieba.cut(qu)) if len(e) > 2 if e != qu]
-            for e in seg_query:
-                if is_name(e) or not normal_qeury(e): continue
-                querys.append(na + '_seg' + '@' + e)
-                a=1
-        #'''
-    except Exception as e:
-        logging.warning('parse_line_err=%s' % repr(e)); print(traceback.format_exc())
-    return querys
-
-def parse_line_ngrams(line):
-    ngrams = []
-    try:
-        querys = parse_line(line)
-        for q in querys:
-            if not isinstance(q, str): continue
-            ngrams.extend(n_gram_words(q, 4, True))
-    except Exception as e:
-        logging.warning('parse_line_ngrams_err=%s' % repr(e)); print(traceback.format_exc())
-    return ngrams
-
-def parse_line_querys(line):
-    querys = []
-    try:
-        querys = parse_line(line)
-    except Exception as e:
-        logging.warning('parse_line_querys_err=%s' % repr(e)); print(traceback.format_exc())
-    return querys
-
-def test():
-    txt = open("../query_correct_0/data/search_data.log1", encoding="utf8").readlines()
-    ngrams, querys = [], []
-    for line in txt:
-        querys.extend(parse_line_querys(line))
-        ngrams.extend(parse_line_ngrams(line))
-    a=1
-
 if __name__ == '__main__':
-    file_name = "../candidate_query_2019-11-07_18_42_01/querys"
-#    resolv_querys("./data/querys1", 10, './data/q', './data/n'); exit()  # 构建query数据
-    #resolv_querys(file_name, 10); exit()     # 构建query数据
-    test(); exit()
     a = normal_qeury("k12d2d2")
+    A = clean_query("市场销售^H*..")
+    pass
