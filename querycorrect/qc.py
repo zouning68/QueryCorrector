@@ -47,39 +47,39 @@ class queryCorrect:
          logging.info(phead % (json.dumps(self.logs, ensure_ascii=False), (time.time()-self.t_begin)))
 
     def correct(self, text):
-        res, dist, debug, origion_text = "", [], [], copy.deepcopy(text)
-        text = clean_query(text)
         try:
             corrected_sent, detail = self.corrector.correct(text)
-            res = [(corrected_sent, 0.5), detail]
+            return corrected_sent, detail
         except Exception as e:
-            logging.warn('correct_err=%s' % repr(e)); print(traceback.format_exc())
-        return res
+            logging.warning('correct_err=%s' % repr(e)); print(traceback.format_exc())
+            return text, []
 
     def run(self, req_dict):
+        result = {}
         self.on_correct_begin()
         self.logs['req_dict'] = req_dict
-        callback_response = {}
+        query = req_dict['request']['p']['query']
+        result["original_query"], result["corrected_query"], result["detail"] = query, "", []
+        query = clean_query(query)
         try:
-            q = req_dict['request']['p']['query']
-            if is_name(q) or is_company(q):      # 人名或公司名不纠错
-                res = [(q, 1), []]
+            if is_name(query): #or is_company(query):      # 人名或公司名不纠错
+                result["corrected_query"], result["detail"] = query, []
             else:
-                res = self.correct(q)  # 开始纠错
-            if res: callback_response['correct_result'] = res
-            else: callback_response['correct_result'] = [(q, 0), []]
-            #print(json.dumps(callback_response, ensure_ascii=False))
+                result["corrected_query"], result["detail"] = self.correct(query)  # 开始纠错
+            #print(json.dumps(result, ensure_ascii=False))
         except Exception as e:
-            logging.warn('run_err=%s' % repr(e)); print(traceback.format_exc())
-            callback_response['correct_result'] = [(q, -1), []]
-        self.logs['result'] = callback_response
+            logging.warning('run_err=%s' % repr(e)); print(traceback.format_exc())
+        self.logs['result'] = result
+        self.logs['senten2term'] = self.corrector.senten2term
+        self.logs['query_entitys'] = self.corrector.query_entitys
+        self.logs['maybe_errors'] = self.corrector.maybe_errors
         self.on_correct_end()
         #print(self.logs); exit()
-        return callback_response
+        return result
 
 if __name__ == '__main__':
     try: que = sys.argv[1]
-    except: que = "淮阴工学院,点匠科技"
+    except: que = "pptv,andorid"
     req_dict = {"header": {},"request": {"c": "", "m": "query_correct", "p": {"query": que}}}
     qc = queryCorrect()
     print(qc.run(req_dict))
