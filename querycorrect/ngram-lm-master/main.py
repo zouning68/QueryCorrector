@@ -8,7 +8,7 @@ from ngram import Ngram
 
 
 def main(args):
-    print(f'Loading corpus from `{os.path.abspath(args.data)}`...')
+    print(f'Loading corpus from `{args.data}`...')
     corpus = Corpus(args.data, order=args.order, lower=args.lower, max_lines=args.max_lines)
     model = Ngram(order=args.order)
     name = f'{args.name}.{args.order}gram'
@@ -23,11 +23,11 @@ def main(args):
     print(f'Vocab size: {len(model.vocab):,}')
 
     if args.save_arpa:
-        print(f'Saving model to `{os.path.abspath(name)}`...')
+        print(f'Saving model to `{name}`...')
         model.save_arpa(name)
 
     assert model.sum_to_one(n=10)
-    '''
+
     print('Generating text...')
     text = model.generate(100)
     text = ' '.join(text)
@@ -35,7 +35,7 @@ def main(args):
     print(text)
     with open(path, 'w') as f:
         print(text, file=f)
-    '''
+
     if model.is_smoothed:
         print('\nPredicting test set NLL...')
         logprob = model(corpus.test)
@@ -52,16 +52,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     Train_word_model = True
     if Train_word_model:
-        data_path, name_ = '../data/query_corpus_ch_word', 'query_word'
+        data_path, name_, ngram_ = '../data/query_corpus_ch_word', 'query_word', 3
     else:
-        data_path, name_ = '../data/query_corpus_ch_char', 'query_char'
-    data_path, name_ = '../data/query_corpus_en', 'eng'     # 英文语料训练
+        data_path, name_, ngram_ = '../data/query_corpus_ch_char', 'query_char', 3
+    # data_path, name_, ngram_ = '../data/query_corpus_en', 'eng', 5     # 英文语料训练
     # Dir args
-    parser.add_argument('--data', default=data_path,            # query_corpus_ch_char/word，query_corpus_en
+    parser.add_argument('--data', default=data_path,
                         help='data directory')
     parser.add_argument('--out', default='./arpa/',
                         help='directory to write out to')
-    parser.add_argument('--name', default=name_,                  # query_char/word，eng
+    parser.add_argument('--name', default=name_,
                         help='model name')
 
     # Data args
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                         help='lowercase data')
 
     # Model args
-    parser.add_argument('--order', type=int, default=5,
+    parser.add_argument('--order', type=int, default=ngram_,
                         help='order of language model')
     parser.add_argument('--add-k', type=int, default=0,
                         help='add k smoothing')
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args); exit()
+    main(args)
 
     q1, q2 = "有限公司", "有限公思"
     lm = kenlm.Model("./arpa/query.3gram.arpa")
