@@ -2,7 +2,7 @@ import codecs, operator, time, logging, sys
 from pypinyin import lazy_pinyin
 import numpy as np
 from data_utils import load_char_set, load_same_pinyin, load_same_stroke, load_word_freq_dict
-from utils import PUNCTUATION_LIST, uniform, is_chinese_string, edit_distance_word, ErrorType, is_alphabet_string, is_name
+from utils import PUNCTUATION_LIST, uniform, is_chinese_string, edit_distance_word, ErrorType, is_alphabet_string, is_name, need_correct_pinying
 from config import config
 from seg_utils import Tokenizer
 from company import get_query_entity, get_entity
@@ -142,7 +142,7 @@ class Detector(Tokenizer):
         # 文本归一化
         sentence = uniform(sentence)
         # 切词
-        if is_alphabet_string(sentence): correctpinyin = False
+        if need_correct_pinying(sentence): correctpinyin = False
         else: correctpinyin = True
         correct_sentence, senten2term, char_seg, word_seg, detail_eng = self.tokenize(sentence, correct_pinyin=correctpinyin)
         self.correct_sentence = correct_sentence
@@ -355,7 +355,7 @@ class Corrector(Detector):
 
 if __name__ == "__main__":
     try: que = sys.argv[1]
-    except: que = "开法工程师" #"百读jaca开法工成师,后太程序开发"
+    except: que = "pptv,andorid" #"百读jaca开法工成师,后太程序开发"
     c = Corrector()
     corrected_sent, detail = c.correct(que)
     print(que, " ------> " ,corrected_sent, detail)

@@ -31,6 +31,13 @@ a=re_en.split("montage+深圳c++")
 def is_alphabet_string(string):     # 判断是否全部为英文字母
     string = string.lower()
     for c in string:
+        if c < 'a' or c > 'z':
+            return False
+    return True
+
+def need_correct_pinying(string):     # 判断是否全部为英文字母
+    string = string.lower()
+    for c in string:
         if c in PUNCTUATION_LIST: continue
         if c < 'a' or c > 'z':
             return False
