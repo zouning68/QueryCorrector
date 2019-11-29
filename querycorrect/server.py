@@ -26,7 +26,7 @@ if __name__ == '__main__':
     numworkers = 1
     app = Application([(r'/query_correct', Handler)], debug=False)
     http_server = HTTPServer(app)
-    http_server.bind(1111)
+    http_server.bind(51668)
     http_server.start(numworkers)
     logging.info('__query_correct_server_running__ num_workers: %s' % numworkers)
     IOLoop.current().start()
