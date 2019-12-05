@@ -1,5 +1,5 @@
 import Levenshtein, json, logging, sys, traceback, time, copy, jieba
-from es_utils import ElasticObj
+#from es_utils import ElasticObj
 from correct import Corrector
 from utils import is_name, clean_query
 from company import is_company
@@ -32,8 +32,8 @@ class queryCorrect:
         self.VERSION = 'query_correct_1'
         self.logs = {}
         #self.es_obj = ElasticObj("candidate_query")
-        self.right = customize_set("./right")
-        self.wrong = customize_set("./wrong")
+        #self.right = customize_set("./right")
+        #self.wrong = customize_set("./wrong")
         self.corrector = Corrector()
         logging.info('init queryCorrect ok, version=[%s]' % self.VERSION)
 
@@ -59,7 +59,7 @@ class queryCorrect:
         self.on_correct_begin()
         self.logs['req_dict'] = req_dict
         query = req_dict['request']['p']['query']
-        result["original_query"], result["corrected_query"], result["detail"] = query, "", []
+        result["original_query"], result["corrected_query"], result["detail"] = query, query, []
         query = clean_query(query)
         try:
             if is_name(query): #or is_company(query):      # 人名或公司名不纠错
@@ -77,12 +77,28 @@ class queryCorrect:
         #print(self.logs); exit()
         return result
 
+    def correc(self, query):
+        result = {}; original_query = copy.deepcopy(query)
+        result["original_query"], result["corrected_query"], result["detail"] = query, query, []
+        query = clean_query(query)
+        try:
+            if is_name(query):  # or is_company(query):      # 人名或公司名不纠错
+                result["corrected_query"], result["detail"] = query, []
+            else:
+                result["corrected_query"], result["detail"] = self.correct(query)  # 开始纠错
+            # print(json.dumps(result, ensure_ascii=False))
+        except Exception as e:
+            logging.warning('run_err=%s' % repr(e)); print(traceback.format_exc())
+        if result["detail"]: return result["corrected_query"]
+        else: return original_query
+
 if __name__ == '__main__':
     try: que = sys.argv[1]
-    except: que = "pptv,andorid"
+    except: que = "上海jvav开法工成师"
     req_dict = {"header": {},"request": {"c": "", "m": "query_correct", "p": {"query": que}}}
     qc = queryCorrect()
-    print(qc.run(req_dict))
+    #print(qc.run(req_dict))
+    print(qc.correc(que))
     #print(qc.ngrams.get("市场", 0))
 
 
