@@ -1,4 +1,4 @@
-import re, logging, traceback
+import re, logging, traceback, copy
 from collections import Counter
 from config import config
 from Pinyin2Hanzi import DefaultDagParams, dag
@@ -22,11 +22,30 @@ def is_name(text):
 a=is_name("锜晓敏")
 
 PUNCTUATION_LIST = ".。,，,、?？:：;；{}[]【】“‘’”《》/!！%……（）<>@#$~^￥%&*\"\'=+-_——「」"
+SPECIAL_WORDS = ['c++','cocos2d-x','.net','--','node.js','c/s','c#']
+
 re_ch = re.compile(u"([\u4e00-\u9fa5])",re.S)
-re_en = re.compile(u"([a-zA-Z\#]+|[0-9]+k[\+]*|c\+\+)",re.S)
+re_en = re.compile(u"([a-zA-Z]+|[0-9]+k[\+]*)",re.S)
 re_salary = re.compile(u"([0-9]+k[\+]*)",re.S)
 
-a=re_en.split("montage+深圳c++")
+def en_split(text):
+    text = text.lower()
+    res = []
+    for w in SPECIAL_WORDS:
+        if text.find(w) < 0: continue
+        text = text.replace(w, ' '+w+' ')
+    seg_text = text.strip().split()
+    for w in seg_text:
+        if w in SPECIAL_WORDS:
+            res.append(w)
+        else:
+            for e in re_en.split(w):
+                if e in ['', ' ']: continue
+                res.append(e)
+    return res
+que = "advc#montage+深圳c++c/s5k"
+a = re_en.split(que)
+aa = en_split(que)
 
 def is_alphabet_string(string):     # 判断是否全部为英文字母
     string = string.lower()

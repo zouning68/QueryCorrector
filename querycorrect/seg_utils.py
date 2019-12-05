@@ -2,7 +2,7 @@ import logging, json, requests, jieba, sys, os, copy, re
 #from nlutools import tools as nlu
 from english_corrector import EnglishCorrector
 from data_utils import load_word_freq_dict, _get_custom_confusion_dict
-from utils import re_en, re_salary, is_alphabet_string, pinyin2hanzi, ErrorType, PUNCTUATION_LIST
+from utils import re_en, re_salary, is_alphabet_string, pinyin2hanzi, ErrorType, en_split, SPECIAL_WORDS
 from config import config
 
 re_seg = re.compile(u"([，,])", re.S)
@@ -66,8 +66,8 @@ class Tokenizer(EnglishCorrector):
 
     def tokenize(self, sentence, correct_eng=True, correct_pinyin=False):
         correct_sentence, senten2term, char_seg, word_seg, detail_eng, char_index, word_index = '', [], [], [], [], 0, 0
-        #a=re_en.split(sentence)#; sentence = "上海百度公司java,elastic开法工程师"; aa=list(self.model.tokenize(sentence))
-        for word in re_en.split(sentence):
+        a=en_split(sentence)
+        for word in en_split(sentence):
             word = word.strip().lower()
             if word in ['', ' ']: continue
             if re_en.fullmatch(word):   # 英文处理
@@ -94,7 +94,10 @@ class Tokenizer(EnglishCorrector):
                         char_seg.append((w, char_index, char_index + 1))
                         char_index += 1
                 else:                   # 分词级别
-                    model_seg = list(self.model.tokenize(word))
+                    if word in SPECIAL_WORDS:
+                        model_seg = [(word, 0, len(word))]
+                    else:
+                        model_seg = list(self.model.tokenize(word))
                     word_seg.extend([(e[0], e[1]+word_index, e[2]+word_index) for e in model_seg])
                     word_index = word_seg[-1][2]
         if config.char_term: senten2term = [e[0] for e in char_seg]
@@ -108,10 +111,10 @@ class Tokenizer(EnglishCorrector):
 
 if __name__ == '__main__':
     try: que = sys.argv[1]
-    except: que = "开法工程师"
+    except: que = "advc#montage+深圳c++c/s5k"
     #nlu_seg = nlu_cut(que)
-    jieba_seg = jieba_cut(que)
+    #jieba_seg = jieba_cut(que)
     #print(json.dumps(cut(que), ensure_ascii=False))   # 分词服务
-    t = Tokenizer(); a = t.tokenize("客服助理(,宁波)(6243)", True)
+    t = Tokenizer(); a = t.tokenize(que, True)
     pass
 
