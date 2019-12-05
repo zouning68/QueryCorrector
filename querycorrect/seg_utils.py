@@ -66,7 +66,7 @@ class Tokenizer(EnglishCorrector):
 
     def tokenize(self, sentence, correct_eng=True, correct_pinyin=False):
         correct_sentence, senten2term, char_seg, word_seg, detail_eng, char_index, word_index = '', [], [], [], [], 0, 0
-        a=en_split(sentence)
+        #a=en_split(sentence)
         for word in en_split(sentence):
             word = word.strip().lower()
             if word in ['', ' ']: continue
