@@ -22,8 +22,8 @@ def is_name(text):
 a=is_name("锜晓敏")
 
 PUNCTUATION_LIST = ".。,，,、?？:：;；{}[]【】“‘’”《》/!！%……（）<>@#$~^￥%&*\"\'=+-_——「」"
-SPECIAL_WORDS = ['c++','cocos2d-x','.net','--','node.js','c/s','c#']
-BLACK_WORDS = ['andrid','exel','jav','andriod']
+SPECIAL_WORDS = ['c++','cocos2d-x','.net','--','node.js','c/s','c#','unity3d']
+BLACK_WORDS = ['andrid','exel','jav','andriod','andrioid','andrio','andriord']
 
 re_ch = re.compile(u"([\u4e00-\u9fa5])",re.S)
 re_en = re.compile(u"([a-zA-Z]+|[0-9]+k[\+]*)",re.S)
