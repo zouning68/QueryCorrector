@@ -23,7 +23,7 @@ a=is_name("锜晓敏")
 
 PUNCTUATION_LIST = ".。,，,、?？:：;；{}[]【】“‘’”《》/!！%……（）<>@#$~^￥%&*\"\'=+-_——「」"
 SPECIAL_WORDS = ['c++','cocos2d-x','.net','--','node.js','c/s','c#','unity3d']
-BLACK_WORDS = ['andrid','exel','jav','andriod','andrioid','andrio','andriord']
+BLACK_WORDS = ['andrid','exel','jav','andriod','andrioid','andrio','andriord','androd']
 
 re_ch = re.compile(u"([\u4e00-\u9fa5])",re.S)
 re_en = re.compile(u"([a-zA-Z]+|[0-9]+k[\+]*)",re.S)
@@ -56,13 +56,14 @@ def is_alphabet_string(string):     # 判断是否全部为英文字母
     return True
 
 def need_correct_pinying(string):     # 判断是否全部为英文字母
-    string = string.lower()
-    for c in string:
+    string = string.lower(); #a = en_split(string)
+    for c in en_split(string):
         if c in PUNCTUATION_LIST: continue
-        if c < 'a' or c > 'z':
-            return False
-    return True
-a=is_alphabet_string("Java,")
+        #aa=pinyin2hanzi([c])
+        if pinyin2hanzi([c]):
+            return True
+    return False
+a=need_correct_pinying("dong开发")
 
 def Q2B(uchar):     # 全角转半角
     inside_code = ord(uchar)
