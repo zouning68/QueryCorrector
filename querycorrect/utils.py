@@ -23,6 +23,7 @@ a=is_name("锜晓敏")
 
 PUNCTUATION_LIST = ".。,，,、?？:：;；{}[]【】“‘’”《》/!！%……（）<>@#$~^￥%&*\"\'=+-_——「」"
 SPECIAL_WORDS = ['c++','cocos2d-x','.net','--','node.js','c/s','c#']
+BLACK_WORDS = ['andrid','exel','jav','andriod']
 
 re_ch = re.compile(u"([\u4e00-\u9fa5])",re.S)
 re_en = re.compile(u"([a-zA-Z]+|[0-9]+k[\+]*)",re.S)
@@ -151,4 +152,5 @@ a=normal_qeury(clean_query("搜狐畅游17173"))
 if __name__ == '__main__':
     a = normal_qeury("k12d2d2")
     A = clean_query("市场销售^H*..")
+    a=is_chinese_string("开法")
     pass

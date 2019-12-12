@@ -1,6 +1,7 @@
 import re, Levenshtein, os, logging, codecs
 from collections import Counter, defaultdict
 from config import config, LanguageModel
+from utils import BLACK_WORDS
 
 def _get_custom_confusion_dict(path):     # 取自定义困惑集。dict, {variant: origin}, eg: {"交通先行": "交通限行"}
     confusion = {}
@@ -80,7 +81,7 @@ class EnglishCorrector(LanguageModel):
         "Most probable spelling correction for word."
         if word in self.custom_confusion_dict:
             return self.custom_confusion_dict.get(word)
-        if len(word) == 1 or word in self.WORDS or not self.WORDS:
+        if word not in BLACK_WORDS and (len(word) == 1 or word in self.WORDS or not self.WORDS):
             return word
         candis = self.candidates(word, 0.5)
         if not candis:
@@ -114,4 +115,4 @@ class EnglishCorrector(LanguageModel):
 if __name__ == '__main__':
     d = Levenshtein.distance("gloang", "golang")
     ec = EnglishCorrector()
-    print(ec.correction("austria"))
+    print(ec.correction("jav"))

@@ -3,16 +3,8 @@ from config import config
 from seg_utils import Tokenizer
 from tqdm import tqdm
 from collections import defaultdict
-from utils import re_en, is_chinese, PUNCTUATION_LIST, clean_query, pinyin2hanzi
-from parse_utils import uncompress
-
-def handle_corpus():
-    cvdata = [line.strip().split('\t') for line in open("corpus/cvdata0", encoding='utf8').readlines()]
-    jddata = [line.strip().split('\t') for line in open("corpus/jddata0", encoding='utf8').readlines()]
-    jdposition = [line.strip().split('\t') for line in open("corpus/jdposition0", encoding='utf8').readlines()]
-    for line in cvdata:
-        cv = json.loads(uncompress(line[1]))
-        pass
+from utils import re_en, is_chinese, PUNCTUATION_LIST, clean_query, pinyin2hanzi, en_split, is_alphabet_string, \
+    SPECIAL_WORDS, BLACK_WORDS
 
 def merge_dict(dict1, dict2, th1=0, th2=0):
     res = defaultdict(int)
@@ -249,10 +241,65 @@ def post_handle(path):
         for i, line in enumerate(tqdm(pingying, total=len(pingying))):
             fin.write(line)
 
+def handle_jdtitle(path):
+    queryfreq, chcorpufreq, encorpufreq, wordfreq, commoncharfreq, englishfreq = \
+        defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int)
+    rm = re.compile(r'(.+)&([0-9]+)', re.M | re.I)
+    with open(path, encoding='utf8') as fin:
+        num_lines = len(fin.readlines())
+    with open(path, encoding='utf8') as fin:
+        for i, line in enumerate(tqdm(fin, total=num_lines)):
+            m = rm.match(line)
+            if not m: continue
+            query, freq = m.group(1), int(m.group(2))
+            seg_query = query.split()
+            chcorpufreq[query] += freq
+            for term in seg_query:
+                if not term or term in PUNCTUATION_LIST or re.fullmatch(r'([a-zA-Z]{1}|[0-9]{1})', term, re.M | re.I): continue
+                wordfreq[term] += freq  # 词频处理
+                for t in list(term):  # 公共汉字字符处理
+                    if is_chinese(t):
+                        commoncharfreq[t] += freq
+                if re_en.fullmatch(term) and len(term) > 1:  # 英文集合
+                    englishfreq[term] += freq
+                    encorpufreq[' '.join(list(term))] += freq
+    sorted_chcorpufreq = sorted(chcorpufreq.items(),key=lambda d: d[1],reverse=True); sorted_encorpufreq = sorted(encorpufreq.items(),key=lambda d: d[1],reverse=True)
+    sorted_wordfreq = sorted(wordfreq.items(),key=lambda d: d[1],reverse=True); sorted_commoncharfreq = sorted(commoncharfreq.items(),key=lambda d: d[1],reverse=True)
+    sorted_englishfreq = sorted(englishfreq.items(),key=lambda d: d[1],reverse=True)
+    write_file(sorted_chcorpufreq, config.query_corpus_ch, need_freq=False); write_file(sorted_encorpufreq, config.query_corpus_en, need_freq=False)
+    write_file(sorted_wordfreq, config.word_freq_path); write_file(sorted_commoncharfreq, config.common_char_path)
+    write_file(sorted_englishfreq, config.english_path)
+    a=1
+
+def static_english_dict():
+    word_freq = defaultdict(int)
+    def static(path, rematch, freqth):
+        res = defaultdict(int)
+        print("\nread file: %s" % (path))
+        for i, line in enumerate(tqdm(open(path, encoding='utf8').readlines())):
+            #line = "java.netweb andrid 10"
+            mr = rematch.match(line)
+            if not mr: continue
+            query, freq = mr.group(1), int(mr.group(2))
+            for w in [e for e in en_split(query) if len(e) > 1 and (is_alphabet_string(e) or e in SPECIAL_WORDS) and e not in BLACK_WORDS]:
+                res[w] += freq
+        return {k: v for k, v in res.items() if v > freqth}
+    word_freq.update(static("dict.backup/english.txt", re.compile(r'(.+) ([0-9]+)', re.M | re.I), 10))
+    #word_freq.update(static("corpus/sort_search_data", re.compile(r'(.+)\t ([0-9]+)', re.M | re.I), 60))
+    #word_freq.update(static("corpus/cvalgo", matchObj1, 100))
+    #word_freq.update(static("corpus/jdalgo", matchObj1, 100))
+    sorted_word_freq = sorted(word_freq.items(), key=lambda d: d[1], reverse=True)
+    encorpufreq = [(' '.join(list(w)), f) for w, f in sorted_word_freq]
+    write_file(sorted_word_freq, config.english_path)
+    write_file(encorpufreq, config.query_corpus_en, need_freq=False)
+    a=1
+
 if __name__ == "__main__":
     pass
     # handle_corpus()
     #gen_normal_query()
     #gen_train_data()
     #gen()
-    post_handle(config.english_path)
+    #post_handle(config.english_path)
+    #handle_jdtitle('corpus/part-00000')
+    static_english_dict()
