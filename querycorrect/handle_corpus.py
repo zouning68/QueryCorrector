@@ -285,9 +285,9 @@ def static_english_dict():
                 res[w] += freq
         return {k: v for k, v in res.items() if v > freqth}
     word_freq.update(static("dict.backup/english.txt", re.compile(r'(.+) ([0-9]+)', re.M | re.I), 10))
-    #word_freq.update(static("corpus/sort_search_data", re.compile(r'(.+)\t ([0-9]+)', re.M | re.I), 60))
-    #word_freq.update(static("corpus/cvalgo", matchObj1, 100))
-    #word_freq.update(static("corpus/jdalgo", matchObj1, 100))
+    word_freq.update(static("corpus/sort_search_data", re.compile(r'(.+)\t ([0-9]+)', re.M | re.I), 60))
+    word_freq.update(static("corpus/cvalgo", matchObj1, 100))
+    word_freq.update(static("corpus/jdalgo", matchObj1, 100))
     sorted_word_freq = sorted(word_freq.items(), key=lambda d: d[1], reverse=True)
     encorpufreq = [(' '.join(list(w)), f) for w, f in sorted_word_freq]
     write_file(sorted_word_freq, config.english_path)
