@@ -1,6 +1,6 @@
 # 压缩项目文件
 rm static_spark.zip
-zip -r static_spark.zip anaconda3 static.py utils.py, config.py, parse_utils, seg_utils.py
+zip -r static_spark.zip *
 
 # python.zip需要提前上传到hdfs中
 hdfs_py_path="hdfs:///user/kdd_zouning/test/conda_test_py3.zip"
@@ -19,7 +19,7 @@ spark-submit \
     --conf spark.yarn.dist.archives="${hdfs_py_path}#$executor_dir"\
     --master local \
     --deploy-mode client \
-    --executor-memory 8G \
+    --executor-memory 1G \
     --num-executors $exenum \
     --executor-cores 4 \
     --py-files static_spark.zip \

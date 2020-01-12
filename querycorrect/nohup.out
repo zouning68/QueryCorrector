@@ -1,0 +1,642 @@
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 394544	current batch:1	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:2	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:3	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:4	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:5	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:6	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:7	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:8	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:9	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:10	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:11	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:12	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:13	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:14	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:15	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:16	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:17	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:18	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:19	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:20	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:21	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:22	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:23	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:24	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:25	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:26	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:27	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:28	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:29	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:30	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:31	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:32	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:33	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:34	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:35	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:36	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:37	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:38	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:39	total batch: 40	success: 10000	failed: []
+total: 394544	current batch:40	total batch: 40	success: 4544	failed: []
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 1135923	current batch:1	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:2	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:3	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:4	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:5	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:6	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:7	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:8	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:9	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:10	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:11	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:12	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:13	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:14	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:15	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:16	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:17	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:18	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:19	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:20	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:21	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:22	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:23	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:24	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:25	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:26	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:27	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:28	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:29	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:30	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:31	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:32	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:33	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:34	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:35	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:36	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:37	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:38	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:39	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:40	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:41	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:42	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:43	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:44	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:45	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:46	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:47	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:48	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:49	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:50	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:51	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:52	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:53	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:54	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:55	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:56	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:57	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:58	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:59	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:60	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:61	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:62	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:63	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:64	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:65	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:66	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:67	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:68	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:69	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:70	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:71	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:72	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:73	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:74	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:75	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:76	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:77	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:78	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:79	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:80	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:81	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:82	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:83	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:84	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:85	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:86	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:87	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:88	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:89	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:90	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:91	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:92	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:93	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:94	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:95	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:96	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:97	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:98	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:99	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:100	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:101	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:102	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:103	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:104	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:105	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:106	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:107	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:108	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:109	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:110	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:111	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:112	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:113	total batch: 114	success: 10000	failed: []
+total: 1135923	current batch:114	total batch: 114	success: 5923	failed: []
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 525915	current batch:1	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:2	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:3	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:4	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:5	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:6	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:7	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:8	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:9	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:10	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:11	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:12	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:13	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:14	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:15	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:16	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:17	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:18	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:19	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:20	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:21	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:22	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:23	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:24	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:25	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:26	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:27	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:28	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:29	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:30	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:31	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:32	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:33	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:34	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:35	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:36	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:37	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:38	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:39	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:40	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:41	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:42	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:43	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:44	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:45	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:46	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:47	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:48	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:49	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:50	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:51	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:52	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:53	total batch: 53	success: 5915	failed: []
+{
+    "took": 1882,
+    "timed_out": false,
+    "_shards": {
+        "total": 1,
+        "successful": 1,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": {
+            "value": 10000,
+            "relation": "gte"
+        },
+        "max_score": 229682.11,
+        "hits": [
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "4295",
+                "_score": 229682.11,
+                "_source": {
+                    "candidate_query": "用户研究",
+                    "candidate_query_chars": "用 户 研 究",
+                    "candidate_query_freq": 1020
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "427509",
+                "_score": 229080.31,
+                "_source": {
+                    "candidate_query": "用户研究  竞品研究 用户体验 用研",
+                    "candidate_query_chars": "用 户 研 究     竞 品 研 究   用 户 体 验   用 研",
+                    "candidate_query_freq": 11
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "5395",
+                "_score": 216994.05,
+                "_source": {
+                    "candidate_query": "用户研究员",
+                    "candidate_query_chars": "用 户 研 究 员",
+                    "candidate_query_freq": 767
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "181765",
+                "_score": 216994.05,
+                "_source": {
+                    "candidate_query": "用户研究部",
+                    "candidate_query_chars": "用 户 研 究 部",
+                    "candidate_query_freq": 23
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "40308",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究专家",
+                    "candidate_query_chars": "用 户 研 究 专 家",
+                    "candidate_query_freq": 89
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "27135",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究经理",
+                    "candidate_query_chars": "用 户 研 究 经 理",
+                    "candidate_query_freq": 131
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "66385",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "资深用户研究",
+                    "candidate_query_chars": "资 深 用 户 研 究",
+                    "candidate_query_freq": 56
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "141683",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户画像研究",
+                    "candidate_query_chars": "用 户 画 像 研 究",
+                    "candidate_query_freq": 29
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "198793",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究助理",
+                    "candidate_query_chars": "用 户 研 究 助 理",
+                    "candidate_query_freq": 21
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "201145",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户体验研究",
+                    "candidate_query_chars": "用 户 体 验 研 究",
+                    "candidate_query_freq": 21
+                }
+            }
+        ]
+    }
+}
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 525915	current batch:1	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:2	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:3	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:4	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:5	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:6	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:7	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:8	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:9	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:10	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:11	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:12	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:13	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:14	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:15	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:16	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:17	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:18	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:19	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:20	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:21	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:22	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:23	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:24	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:25	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:26	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:27	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:28	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:29	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:30	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:31	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:32	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:33	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:34	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:35	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:36	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:37	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:38	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:39	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:40	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:41	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:42	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:43	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:44	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:45	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:46	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:47	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:48	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:49	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:50	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:51	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:52	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:53	total batch: 53	success: 5915	failed: []
+Traceback (most recent call last):
+  File "es_utils.py", line 211, in <module>
+    es_obj.update_index_batch(10000); print("time cost:%f" % time.time() - t0); logging.info("time cost:%f" % time.time() - t0)    # ****** 批量更新索引操作 *******
+TypeError: unsupported operand type(s) for -: 'str' and 'float'
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 525915	current batch:1	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:2	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:3	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:4	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:5	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:6	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:7	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:8	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:9	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:10	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:11	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:12	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:13	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:14	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:15	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:16	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:17	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:18	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:19	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:20	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:21	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:22	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:23	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:24	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:25	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:26	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:27	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:28	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:29	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:30	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:31	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:32	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:33	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:34	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:35	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:36	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:37	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:38	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:39	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:40	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:41	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:42	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:43	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:44	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:45	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:46	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:47	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:48	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:49	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:50	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:51	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:52	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:53	total batch: 53	success: 5915	failed: []
+time cost: 84.738184
+{
+    "took": 1941,
+    "timed_out": false,
+    "_shards": {
+        "total": 1,
+        "successful": 1,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": {
+            "value": 10000,
+            "relation": "gte"
+        },
+        "max_score": 229682.11,
+        "hits": [
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "4295",
+                "_score": 229682.11,
+                "_source": {
+                    "candidate_query": "用户研究",
+                    "candidate_query_chars": "用 户 研 究",
+                    "candidate_query_freq": 1020
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "427509",
+                "_score": 229080.31,
+                "_source": {
+                    "candidate_query": "用户研究  竞品研究 用户体验 用研",
+                    "candidate_query_chars": "用 户 研 究     竞 品 研 究   用 户 体 验   用 研",
+                    "candidate_query_freq": 11
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "5395",
+                "_score": 216994.05,
+                "_source": {
+                    "candidate_query": "用户研究员",
+                    "candidate_query_chars": "用 户 研 究 员",
+                    "candidate_query_freq": 767
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "181765",
+                "_score": 216994.05,
+                "_source": {
+                    "candidate_query": "用户研究部",
+                    "candidate_query_chars": "用 户 研 究 部",
+                    "candidate_query_freq": 23
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "66385",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "资深用户研究",
+                    "candidate_query_chars": "资 深 用 户 研 究",
+                    "candidate_query_freq": 56
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "40308",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究专家",
+                    "candidate_query_chars": "用 户 研 究 专 家",
+                    "candidate_query_freq": 89
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "27135",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究经理",
+                    "candidate_query_chars": "用 户 研 究 经 理",
+                    "candidate_query_freq": 131
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "141683",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户画像研究",
+                    "candidate_query_chars": "用 户 画 像 研 究",
+                    "candidate_query_freq": 29
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "198793",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户研究助理",
+                    "candidate_query_chars": "用 户 研 究 助 理",
+                    "candidate_query_freq": 21
+                }
+            },
+            {
+                "_index": "candidate_query",
+                "_type": "_doc",
+                "_id": "201145",
+                "_score": 205634.44,
+                "_source": {
+                    "candidate_query": "用户体验研究",
+                    "candidate_query_chars": "用 户 体 验 研 究",
+                    "candidate_query_freq": 21
+                }
+            }
+        ]
+    }
+}
+index is delete-> {'acknowledged': True}
+index is create->{'acknowledged': True, 'shards_acknowledged': True, 'index': 'candidate_query'}, {"mappings": {"_source": {"enabled": true}, "properties": {"candidate_query": {"type": "text"}, "candidate_query_chars": {"type": "text"}, "candidate_query_freq": {"type": "integer"}}}}
+total: 525915	current batch:1	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:2	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:3	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:4	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:5	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:6	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:7	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:8	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:9	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:10	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:11	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:12	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:13	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:14	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:15	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:16	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:17	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:18	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:19	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:20	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:21	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:22	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:23	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:24	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:25	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:26	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:27	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:28	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:29	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:30	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:31	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:32	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:33	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:34	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:35	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:36	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:37	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:38	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:39	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:40	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:41	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:42	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:43	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:44	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:45	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:46	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:47	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:48	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:49	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:50	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:51	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:52	total batch: 53	success: 10000	failed: []
+total: 525915	current batch:53	total batch: 53	success: 5915	failed: []
+time cost: 82.420384s
