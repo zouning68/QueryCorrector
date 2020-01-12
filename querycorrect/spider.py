@@ -1,6 +1,8 @@
-import requests, urllib, time, sys, re
+import requests, urllib, time, sys, re, os, logging
 from lxml import etree
 from bs4 import BeautifulSoup
+from tqdm import tqdm
+from config import config
 
 xpath = '//*[@id="super_se_tip"]/div/span/strong[2]'
 xpath = '/html/body/div[1]/div[3]/div[1]/div[3]/div[1]/div/span/strong[2]'
@@ -58,8 +60,41 @@ def spider(query):
             print("spider error" + str(e))
     return correct_query, 'success'
 
+def init_log(log_file):
+    #cur_file = os.path.split(__file__)[-1].split(".")[0]
+    logger = logging.getLogger('log')
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    fh = logging.FileHandler('./'+log_file+'.log', mode='a', encoding='utf-8')
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+    return logger
+
+def spider_query():
+    path = "corpus/sort_search_data"         # config.query
+    lf = "baidusearchspider"         # spider.log
+    logger = init_log(lf)
+    #matchObj = re.compile(r'(.+)&([0-9]+)', re.M | re.I)
+    matchObj = re.compile(r'(.+)\t ([0-9]+)', re.M | re.I)
+    preline = 0
+    if os.path.exists(lf):
+        lastline = open(lf, encoding="utf8").readlines()
+        if lastline:
+            m = re.match(".+ - INFO - (\d+):(.+)->(.+)$", lastline[-1])
+            if m: preline = int(m.group(1))
+    for i, line in enumerate(tqdm(open(path, encoding='utf8'))):
+        if i <= preline: continue
+        match_res = matchObj.match(line)
+        if not match_res: continue
+        q, f = match_res.group(1), int(match_res.group(2))
+        correct, detail = spider(q)
+        if correct == q: continue
+        logger.info('%s:%s->%s' % (i, q, correct))
+
 if __name__ == '__main__':
     try: que = sys.argv[1]
     except: que = "开法工程师"
     #print(spider1(que))
-    print(spider(que))
+    #print(spider(que))
+    spider_query()

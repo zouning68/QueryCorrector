@@ -1,4 +1,4 @@
-import re, Levenshtein, os, logging, codecs
+import re, Levenshtein, os, logging, codecs, math
 from collections import Counter, defaultdict
 from config import config, LanguageModel
 from utils import BLACK_WORDS
@@ -67,7 +67,7 @@ class EnglishCorrector(LanguageModel):
     def eng_ppl_score(self, words):         # 取语言模型困惑度得分，越小句子越通顺。words: list, 以词或字切分
         return self.eng_lm.perplexity(' '.join(words))
 
-    def sort_candidates(self, word, candidates, edit_sort=True, topk=2):
+    def sort_candidates(self, word, candidates, edit_sort=True, topk=3):
         if edit_sort:
             candi_scores = [(e, round(Levenshtein.ratio(e, word), 3)) for e in candidates]
             sorted_candis = selecttopk(candi_scores, topk)
@@ -79,9 +79,10 @@ class EnglishCorrector(LanguageModel):
 
     def correction(self, word):
         "Most probable spelling correction for word."
+        word = word.lower()
         if word in self.custom_confusion_dict:
             return self.custom_confusion_dict.get(word)
-        if word not in BLACK_WORDS and (len(word) == 1 or word in self.WORDS or not self.WORDS):
+        if word not in BLACK_WORDS and (len(word) == 1 or self.WORDS.get(word, 0) > 0 or not self.WORDS):
             return word
         candis = self.candidates(word, 0.5)
         if not candis:
@@ -90,7 +91,7 @@ class EnglishCorrector(LanguageModel):
         candidate, sorted_scores = self.sort_candidates(word, candi, False)  # 语言模型排序
         #scores = [(e, self.eng_ppl_score(list(e))) for e in candis]
         #sorted_scores = sorted(scores, key=lambda d: d[1])
-        return sorted_scores[0][0]
+        return candidate[0]
 
     def candidates(self, word, frac=1):
         "Generate possible spelling corrections for word."
@@ -101,11 +102,13 @@ class EnglishCorrector(LanguageModel):
         res.update(candidate_word)
         res.update(candidate_edit1)
         res.update(candidate_edit2)
-        word_freq = {e: self.WORDS.get(e, 0) for e in res}
+        word_freq = {e: self.WORDS.get(e, 0) for e in res if e not in BLACK_WORDS}
         sorted_word_freq = sorted(word_freq.items(), key=lambda d: d[1], reverse=True)
-        sorted_word_freq_top = sorted_word_freq[: int(len(sorted_word_freq) * frac)]
-        res = set(w for w, f in sorted_word_freq_top)
-        return res
+        cut_index = math.ceil(len(sorted_word_freq) * frac)
+        while cut_index + 1 < len(sorted_word_freq) - 1 and sorted_word_freq[cut_index + 1][1] == sorted_word_freq[cut_index][1]: cut_index += 1
+        sorted_word_freq_top = sorted_word_freq[: cut_index]
+        result = set(w for w, f in sorted_word_freq_top)
+        return result
 
     def known_word(self, words):
         "The subset of `words` that appear in the dictionary of WORDS."
@@ -113,6 +116,8 @@ class EnglishCorrector(LanguageModel):
         return res
 
 if __name__ == '__main__':
-    d = Levenshtein.distance("gloang", "golang")
+    d = Levenshtein.distance("andriord", "android")
     ec = EnglishCorrector()
-    print(ec.correction("jav"))
+    for e in ['jav','slot','andrid', 'andrd','exel','exact','misfit','arcsoft','andriod','androi','Andriord']:
+        e='C/S'
+        print(e + ' -> ' + ec.correction(e))

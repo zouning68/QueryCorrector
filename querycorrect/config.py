@@ -21,17 +21,18 @@ class Config:
         self.candidate_query_path = os.path.join(pwd_path, 'data/candidate_query')  # 出来后的的query文件
         self.query_corpus_en = os.path.join(pwd_path, 'data/query_corpus_en')  # 用于训练语言模型的英文query文件
         self.kg_nodes_full_data = os.path.join(pwd_path, 'corpus/kg_nodes_full_data_20190916.jsonl')    # 已经挖掘好的实体信息
+        self.search_data = os.path.join(pwd_path, 'corpus/sort_search_data')  # 搜索日志
         self.query = os.path.join(pwd_path, 'data/query_original')          # 保存的query
         self.jd_title = os.path.join(pwd_path, 'corpus/jdtitle')            # 职位的title
         self.pingying = os.path.join(pwd_path, 'dict/pinping.txt')
         self.commom_char_th = 1000000
-        self.english_th = 2
-        self.word_freq_th = 3
+        self.english_th = -2
+        self.word_freq_th = -3
         if self.char_term:
-            self.language_model_path = os.path.join(pwd_path, 'arpa/query_char.3gram.arpa')  # 字类型的 language model path
+            self.language_model_path = os.path.join(pwd_path, 'arpa/query_char.5gram.arpa')  # 字类型的 language model path
             self.query_corpus_ch = os.path.join(pwd_path, 'data/query_corpus_ch_char')  # 用于训练语言模型的中英query文件
         else:
-            self.language_model_path = os.path.join(pwd_path, 'arpa/query_word.3gram.arpa')  # 词类型的 language model path
+            self.language_model_path = os.path.join(pwd_path, 'arpa/query_word.5gram.arpa')  # 词类型的 language model path
             self.query_corpus_ch = os.path.join(pwd_path, 'data/query_corpus_ch_word')  # 用于训练语言模型的中英query文件
 config = Config()
 #config.language_model_path = os.path.join(pwd_path, 'ngram-lm-master/arpa/query_word.3gram.arpa')       # TEST
@@ -43,6 +44,7 @@ class LanguageModel(object):
         try:
             self.eng_lm = kenlm.Model(config.eng_language_model_path)
             self.lm = kenlm.Model(config.language_model_path)
+            #self.eng_lm, self.lm = None, None
         except:
             self.eng_lm, self.lm = None, None
         logging.debug('Loaded language model: %s, spend: %s s' % (config.language_model_path, str(time.time() - t1)))

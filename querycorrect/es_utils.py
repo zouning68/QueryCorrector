@@ -1,7 +1,9 @@
 from elasticsearch import Elasticsearch
 import json, logging, traceback, requests, sys, math, os, time, re
-from utils import read_file, CandidateQueryFile, clean_query
+from data_utils import read_file
 from elasticsearch.helpers import bulk
+from utils import clean_query
+from config import config
 
 index_mappings = {
     "mappings": {
@@ -108,7 +110,7 @@ class ElasticObj:
             self.delete_index()     # 删除索引
             self.create_index()     # 创建索引
             # ******************** 更新索引数据 ************************
-            candidate_query = read_file(CandidateQueryFile)
+            candidate_query = read_file(config.candidate_query_path)
             _id_ = 0
             for k, v in candidate_query.items():
                 #print("%s\t%d\t%s" % (k, int(v), ' '.join(list(k)))); exit()
@@ -129,7 +131,7 @@ class ElasticObj:
             self.delete_index()  # 删除索引
             self.create_index()  # 创建索引
             # ******************** 更新索引数据 ************************
-            candidate_query = read_file(CandidateQueryFile)
+            candidate_query = read_file(config.candidate_query_path)
             candidate_query_keys = list(candidate_query.keys())
             total = len(candidate_query_keys)
             batchs = math.ceil(len(candidate_query_keys) / batch_size)
@@ -202,7 +204,8 @@ class ElasticObj:
              qm = {"query_string": {"query": "candidate_query_chars:(" + chars + ") candidate_query:(" + text + ")^10000", "minimum_should_match": "50%"}}
              q.addQuery(category='map', query_map=qm, type='should')
              q.addQuery(category='range', k='candidate_query_length', gte=len_min, lte=len_max, type='must')
-             searched = self.getSortedDataByURL(q.query['query'], Size=_size)
+             functions = []; functions.append({'script_score': {"script": "(Math.log1p(doc['candidate_query_freq'].value)*1) / 1"}, 'weight': 0.6})
+             searched = self.getSortedDataByURL(q.query['query'], Size=_size, functions_list=functions)
              return searched
          except Exception as e:
              logging.warn('search_err=%s' % repr(e)); print(traceback.format_exc())
@@ -215,13 +218,14 @@ if __name__ == "__main__":
     es_obj = ElasticObj("candidate_query")
 
     #es_obj.update_index()      # ****** 更新索引操作 *******
-#    es_obj.update_index_batch(50000)    # ****** 批量更新索引操作 *******
+    if que == "gxsy":
+        es_obj.update_index_batch(50000)    # ****** 批量更新索引操作 *******
 
     #es_obj.delete_index()
     #es_obj.create_index()
     #sech = es_obj.get_all_data(5); print("%s\n%s" % (sech['hits']['total'], json.dumps(sech, ensure_ascii=False)))
     #q = query(); q.addQuery(category="terms", k="candidate_query", v=["研", "法", "测", "试", "究", "员"], type="must")
     #searched = es_obj.getSortedDataByURL(q.query['query'])
-    print(json.dumps(es_obj.search(que, _size=10), ensure_ascii=False, indent=4))
+#    print(json.dumps(es_obj.search(que, _size=10), ensure_ascii=False, indent=4))
 
 

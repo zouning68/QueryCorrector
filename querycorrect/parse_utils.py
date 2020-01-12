@@ -1,6 +1,6 @@
 import json, re, logging, traceback, jieba, zlib, binascii, math
 import numpy as np
-from utils import clean_query, is_name, normal_qeury, n_gram_words
+from utils import clean_query, is_name, normal_qeury, n_gram_words, is_alphabet_string, SPECIAL_WORDS
 from seg_utils import Tokenizer
 
 t = Tokenizer()
@@ -145,7 +145,77 @@ def parse_line_cv(line):
         logging.warning('parse_line_querys_err=%s' % repr(e)); print(traceback.format_exc())
     return res
 
+def get_algo_info(origi_dict, key, ent, *args):
+    res = []
+    try:
+        if key not in origi_dict: return res
+        info = json.loads(origi_dict[key])
+        if type(info) == type({}):
+            for k, v in info.items():
+                res.extend(extrade(v, ent, *args))
+        elif type(info) == type([]):
+            for ele in info:
+                res.extend(extrade(ele, ent, *args))
+    except Exception as e:
+        logging.warning('get_algo_info_err=%s' % repr(e)); print(traceback.format_exc())
+    return res
+
+def extrade(info, ent, *args):
+    res = []
+    if ent:     # 实体抽取
+        for e in info['must']: res.append(e.split(':')[0])
+        for e in info['title']['major']: res.append(e.split(':')[0])
+        for e in info['title']['skill']: res.append(e.split(':')[0])
+        for e in info['desc']['major']: res.append(e.split(':')[0])
+        for e in info['desc']['skill']: res.append(e.split(':')[0])
+    else:
+        for e in args[0]:
+            if e not in info or not info[e]: continue
+            if type(info[e]) == type([]): res.extend(info[e])
+            elif isinstance(info[e], str): res.append(info[e])
+            elif type(info[e]) == type({}): res.extend(list(info[e].keys()))
+    return res
+
+def parse_cv_algo(line):
+    res, tmp = [], []
+    try:
+        seg_line = line.strip().split('\t')
+        cv_dict = json.loads(seg_line[1])
+        #cv_tag = get_algo_info(cv_dict, 'cv_tag', False, ['add_kws'])
+        #cv_title = get_algo_info(cv_dict, 'cv_title', False, ['phrase'])
+        #cv_trade = get_algo_info(cv_dict, 'cv_trade', False, ['first_trades_txt', 'second_trades_txt', 'trade_details_txt', 'company_name'])
+        #cv_entity = get_algo_info(cv_dict, 'cv_entity', True)
+        try: cv_feature = json.loads(cv_dict['cv_feature'])
+        except: return res
+        for k, v in cv_feature.items():
+            for e in v:
+                tmp.extend(list(e['desc'].keys()))
+        #res = [e for e in tmp if is_alphabet_string(e) or e in SPECIAL_WORDS]
+        res = tmp
+    except Exception as e:
+        logging.warning('parse_cv_algo_err=%s' % repr(e)); print(traceback.format_exc())
+    return res
+
+def parse_jd_algo(line):
+    res, tmp = [], []
+    try:
+        seg_line = line.strip().split('\t')
+        jd5 = json.loads(seg_line[5])
+        jd6 = json.loads(seg_line[6])
+        for k, v in jd5['word'].items(): tmp.extend(list(v.keys()))
+        #res = [e for e in tmp if is_alphabet_string(e) or e in SPECIAL_WORDS]
+        res = tmp
+    except Exception as e:
+        logging.warning('parse_jd_algo_err=%s' % repr(e)); print(traceback.format_exc())
+    return res
+
 def test():
+    jddata = open("corpus/jddata0", encoding="utf8").readlines()
+    for line in jddata: parse_line_jd(line)
+    cvalgo = open("corpus/cvalgo", encoding="utf8").readlines()
+    for line in cvalgo: parse_cv_algo(line)
+    jdalgo = open("corpus/jdalgo0", encoding="utf8").readlines()
+    for line in jdalgo: parse_jd_algo(line)
     txtjd = open("corpus/jdposition0", encoding="utf8").readlines()
     for line in txtjd: parse_line_jdtitle(line)
     txtcv = open("corpus/cvdata0", encoding="utf8").readlines()

@@ -182,7 +182,7 @@ def gen():
             match_res = matchObj.match(line)
             if not match_res: continue
             names, query, freq = match_res.group(1), clean_query(match_res.group(2)), int(match_res.group(3))
-            if names == "query": continue       #  ************** 交叉验证方法 **************
+            #if names == "query": continue       #  ************** 交叉验证方法 **************
             if names in filter_names: continue
             query_freq, ch_corpu_freq, en_corpu_freq, word_freq, common_char_freq, english_freq = analyse_term(query, freq)
             queryfreq.update(query_freq); chcorpufreq.update(ch_corpu_freq); encorpufreq.update(en_corpu_freq); wordfreq.update(word_freq)
@@ -299,7 +299,7 @@ if __name__ == "__main__":
     # handle_corpus()
     #gen_normal_query()
     #gen_train_data()
-    #gen()
+    gen()
     #post_handle(config.english_path)
     #handle_jdtitle('corpus/part-00000')
-    static_english_dict()
+    #static_english_dict()

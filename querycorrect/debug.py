@@ -156,12 +156,26 @@ def parse_line_querys(line):
 def test():
     #read_file(CandidateQueryFile)
     res = {}
-    with open("../code_back/querys", encoding="utf8") as f:
+    with open("../candidate_query1/querys", encoding="utf8") as f:
         for line in f.readlines():
             line = line.strip().split("@")
             if len(line) != 2: continue
             if line[0] not in res: res[line[0]] = []
             res[line[0]].append(line[1])
+            #print(res); exit()
+    freq_statis = {}
+    for k, v in res.items():
+        for e in v:
+            try:
+                se = e.split('&')
+                len_q = len(se[0])
+                if len_q not in freq_statis: freq_statis[len_q] = 0
+                freq_statis[len_q] += 1
+            except: continue
+    sorted_freq_statis = sorted(freq_statis.items(), key = lambda d: d[1], reverse=True)
+    print(json.dumps(sorted_freq_statis))
+    #        exit()
+    exit()
     for k, v in res.items():
         v_map = {e.split('&')[0]: int(e.split('&')[1]) for e in v if len(e.split('&')) == 2 and e.split('&')[1].isdigit()}
         v_sorted = sorted(v_map.items(), key = lambda d: d[1], reverse=True)
@@ -179,19 +193,8 @@ def test():
         querys.extend(parse_line_querys(line))
     a=1
 
-def aa():
-    import time, jieba
-    import progressbar
-    a = time.strftime('%Y-%m-%d_%H_%M_%S',time.localtime(time.time()))
-    aa=list(jieba.cut("京东金融,秦京"))
-    aaa=list(jieba.tokenize("京东金融"))
-
-    for i in progressbar.progressbar(100):
-        time.sleep(0.02)
-
 if __name__ == '__main__':
-    aa(); exit()
-    print(abs(len("房地产/建筑/建材/工程") - len("房地产,/建筑/建材/工程")) < 1);exit()
+#    print(abs(len("房地产/建筑/建材/工程") - len("房地产,/建筑/建材/工程")) < 1);exit()
     test(); exit()
     a = nomal_qeury("k12d2d2")
     print(read_file(CandidateQueryFile)); exit()
